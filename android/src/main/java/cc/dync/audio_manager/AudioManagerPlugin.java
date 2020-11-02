@@ -237,7 +237,15 @@ public class AudioManagerPlugin implements FlutterPlugin, MethodCallHandler, Vol
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         //Stop the audio on app killed
-        helper.stop();
+
+        Log.d("onDetachedFromEngine", "onDetachedFromEngine Fired");
+       try {
+           if(helper != null){
+               helper.stop();
+           }
+       } catch (Exception e){
+           e.printStackTrace();
+       }
     }
 
     @Override
