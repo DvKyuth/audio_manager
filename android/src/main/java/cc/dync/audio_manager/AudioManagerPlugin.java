@@ -243,9 +243,9 @@ public class AudioManagerPlugin implements FlutterPlugin, MethodCallHandler, Vol
 
         Log.d("onDetachedFromEngine", "onDetachedFromEngine Fired");
        try {
-           if(helper != null){
-               helper.stop();
-           }
+           helper.stop();
+           helper.release();
+           Log.d("onDetachedFromEngine", "onDetachedFromEngine DONE");
        } catch (Exception e){
            e.printStackTrace();
        }

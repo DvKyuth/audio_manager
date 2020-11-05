@@ -173,15 +173,33 @@ public class MediaPlayerService extends Service {
     private void setupNotification() {
         // 设置点击通知结果
 //        Intent intent = new Intent("android.flutter.audio_manager.activity");
+
+        Log.d("getPackageName()" , getPackageName());
+
         Intent intent = new Intent(this, AudioManagerPlugin.class);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(this, CONTENT_PENDING_REQUESTS, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //Solving click on notification to open app
+        try {
+            intent = Objects.requireNonNull(getPackageManager()
+                    .getLaunchIntentForPackage(getPackageName()))
+                    .setPackage(null)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+            contentPendingIntent = PendingIntent.getActivity(context, CONTENT_PENDING_REQUESTS, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Log.d("contentPendingIntent" , getPackageName());
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // 自定义布局
         views = new RemoteViews(getPackageName(), R.layout.layout_mediaplayer);
         // 下一首
-//        Intent intentNext = new Intent(ACTION_NEXT);
-//        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(this, NEXT_PENDING_REQUESTS, intentNext, PendingIntent.FLAG_CANCEL_CURRENT);
-//        views.setOnClickPendingIntent(R.id.iv_next, nextPendingIntent);
+        Intent intentNext = new Intent(ACTION_NEXT);
+        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(this, NEXT_PENDING_REQUESTS, intentNext, PendingIntent.FLAG_CANCEL_CURRENT);
+        views.setOnClickPendingIntent(R.id.iv_next, nextPendingIntent);
 
         // 暂停/播放
         Intent intentPlay = new Intent(ACTION_PLAY_OR_PAUSE);
@@ -189,9 +207,9 @@ public class MediaPlayerService extends Service {
         views.setOnClickPendingIntent(R.id.iv_pause, playPendingIntent);
 
         // 停止
-//        Intent intentStop = new Intent(ACTION_STOP);
-//        PendingIntent stopPendingIntent = PendingIntent.getBroadcast(this, STOP_PENDING_REQUESTS, intentStop, PendingIntent.FLAG_CANCEL_CURRENT);
-//        views.setOnClickPendingIntent(R.id.iv_cancel, stopPendingIntent);
+        Intent intentStop = new Intent(ACTION_STOP);
+        PendingIntent stopPendingIntent = PendingIntent.getBroadcast(this, STOP_PENDING_REQUESTS, intentStop, PendingIntent.FLAG_CANCEL_CURRENT);
+        views.setOnClickPendingIntent(R.id.iv_cancel, stopPendingIntent);
 
         builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 // 设置状态栏小图标
