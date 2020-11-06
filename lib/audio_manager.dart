@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'package:flutter/services.dart';
-import 'package:audio_manager/src/AudioType.dart';
+
 import 'package:audio_manager/src/AudioInfo.dart';
+import 'package:audio_manager/src/AudioType.dart';
+import 'package:flutter/services.dart';
 
 export 'package:audio_manager/src/AudioInfo.dart';
 export 'package:audio_manager/src/AudioType.dart';
@@ -20,8 +21,7 @@ class AudioManager {
 
   static MethodChannel _channel;
   AudioManager._() {
-    _channel = const MethodChannel('audio_manager')
-      ..setMethodCallHandler(_handler);
+    _channel = const MethodChannel('audio_manager')..setMethodCallHandler(_handler);
     getCurrentVolume();
   }
 
@@ -60,8 +60,7 @@ class AudioManager {
 
   /// Set up playlists. Use the [play] or [start] method if you want to play
   set audioList(List<AudioInfo> list) {
-    if (list == null || list.length == 0)
-      throw "[list] can not be null or empty";
+    if (list == null || list.length == 0) throw "[list] can not be null or empty";
     _audioList = list;
     _info = _initRandom();
   }
@@ -95,8 +94,7 @@ class AudioManager {
         break;
       case "seekComplete":
         _position = Duration(milliseconds: call.arguments ?? 0);
-        if (_duration.inMilliseconds != 0)
-          _onEvents(AudioManagerEvents.seekComplete, _position);
+        if (_duration.inMilliseconds != 0) _onEvents(AudioManagerEvents.seekComplete, _position);
         break;
       case "buffering":
         _onEvents(AudioManagerEvents.buffering, call.arguments);
@@ -109,14 +107,12 @@ class AudioManager {
         _position = Duration(milliseconds: call.arguments["position"] ?? 0);
         _duration = Duration(milliseconds: call.arguments["duration"] ?? 0);
         if (!_playing) _setPlaying(true);
-        if (_position.inMilliseconds < 0 || _duration.inMilliseconds <= 0)
-          break;
+        if (_position.inMilliseconds < 0 || _duration.inMilliseconds <= 0) break;
         if (_position > _duration) {
           _position = _duration;
           _setPlaying(false);
         }
-        _onEvents(AudioManagerEvents.timeupdate,
-            {"position": _position, "duration": _duration});
+        _onEvents(AudioManagerEvents.timeupdate, {"position": _position, "duration": _duration});
         break;
       case "error":
         _error = call.arguments;
@@ -185,11 +181,9 @@ class AudioManager {
   ///
   /// `desc`: Notification details; `cover`: cover image address, `network` address, or `asset` address;
   /// `auto`: Whether to play automatically, default is true;
-  Future<String> start(String url, String title,
-      {String desc, String cover, bool auto}) async {
+  Future<String> start(String url, String title, {String desc, String cover, bool auto}) async {
     if (url == null || url.isEmpty) return "[url] can not be null or empty";
-    if (title == null || title.isEmpty)
-      return "[title] can not be null or empty";
+    if (title == null || title.isEmpty) return "[title] can not be null or empty";
     cover = cover ?? "";
     desc = desc ?? "";
 
@@ -200,21 +194,17 @@ class AudioManager {
 
   /// This will load the file from the file-URI given by:
   /// `'file://${file.path}'`.
-  Future<String> file(File file, String title,
-      {String desc, String cover, bool auto}) async {
-    return await start("file://${file.path}", title,
-        desc: desc, cover: cover, auto: auto);
+  Future<String> file(File file, String title, {String desc, String cover, bool auto}) async {
+    return await start("file://${file.path}", title, desc: desc, cover: cover, auto: auto);
   }
 
   Future<String> startInfo(AudioInfo audio, {bool auto}) async {
-    return await start(audio.url, audio.title,
-        desc: audio.desc, cover: audio.coverUrl, auto: auto);
+    return await start(audio.url, audio.title, desc: audio.desc, cover: audio.coverUrl, auto: auto);
   }
 
   /// Play specified subscript audio if you want
   Future<String> play({int index, bool auto}) async {
-    if (index != null && (index < 0 || index >= _audioList.length))
-      throw "invalid index";
+    if (index != null && (index < 0 || index >= _audioList.length)) throw "invalid index";
     stop();
     _auto = auto ?? true;
     _curIndex = index ?? _curIndex;
@@ -273,11 +263,8 @@ class AudioManager {
   /// ⚠️ You must after [AudioManagerEvents.ready] event invoked before you can change the playback progress
   Future<String> seekTo(Duration position) async {
     if (_preprocessing().isNotEmpty) return _preprocessing();
-    if (position.inMilliseconds < 0 ||
-        position.inMilliseconds > duration.inMilliseconds)
-      return "[position] must be greater than 0 and less than the total duration";
-    return await _channel
-        .invokeMethod("seekTo", {"position": position.inMilliseconds});
+    if (position.inMilliseconds < 0 || position.inMilliseconds > duration.inMilliseconds) return "[position] must be greater than 0 and less than the total duration";
+    return await _channel.invokeMethod("seekTo", {"position": position.inMilliseconds});
   }
 
   /// `rate` Play rate, default [AudioRate.rate100] is 1.0
@@ -291,7 +278,8 @@ class AudioManager {
 
   /// stop play
   stop() {
-    _reset();
+    _position = Duration(milliseconds: 0);
+    _setPlaying(false);
     _initialize = false;
     _channel.invokeMethod("stop");
   }
@@ -300,8 +288,7 @@ class AudioManager {
     // _duration = Duration(milliseconds: 0);
     _position = Duration(milliseconds: 0);
     _setPlaying(false);
-    _onEvents(AudioManagerEvents.timeupdate,
-        {"position": _position, "duration": _duration});
+    _onEvents(AudioManagerEvents.timeupdate, {"position": _position, "duration": _duration});
   }
 
   /// release all resource
@@ -376,8 +363,7 @@ class AudioManager {
   Future<String> setVolume(double value, {bool showVolume = false}) async {
     var volume = min(value, 1);
     value = max(value, 0);
-    final result = await _channel
-        .invokeMethod("setVolume", {"value": volume, "showVolume": showVolume});
+    final result = await _channel.invokeMethod("setVolume", {"value": volume, "showVolume": showVolume});
     return result;
   }
 
