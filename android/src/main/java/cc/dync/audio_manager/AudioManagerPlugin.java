@@ -89,7 +89,7 @@ public class AudioManagerPlugin implements FlutterPlugin, MethodCallHandler, Vol
         MethodChannel channel = instance.channel;
 
         helper.setOnStatusCallbackListener((status, args) -> {
-            Log.v(TAG, "--" + status.toString());
+//            Log.v(TAG, "--" + status.toString());
             switch (status) {
                 case ready:
                     channel.invokeMethod("ready", helper.duration());
@@ -99,7 +99,7 @@ public class AudioManagerPlugin implements FlutterPlugin, MethodCallHandler, Vol
                     break;
                 case buffering:
                     if (args.length == 0) return;
-                    Log.v(TAG, "网络缓冲:" + args[1] + "%");
+//                    Log.v(TAG, "网络缓冲:" + args[1] + "%");
 
                     Map map = new HashMap();
                     map.put("buffering", !helper.isPlaying());
@@ -112,7 +112,7 @@ public class AudioManagerPlugin implements FlutterPlugin, MethodCallHandler, Vol
                     break;
                 case progress:
                     if (args.length == 0) return;
-                    Log.v(TAG, "进度:" + args[0] + "%");
+//                    Log.v(TAG, "进度:" + args[0] + "%");
 
                     Map map2 = new HashMap();
                     map2.put("position", helper.position());
@@ -120,7 +120,7 @@ public class AudioManagerPlugin implements FlutterPlugin, MethodCallHandler, Vol
                     channel.invokeMethod("timeupdate", map2);
                     break;
                 case error:
-                    Log.v(TAG, "播放错误:" + args[0]);
+//                    Log.v(TAG, "播放错误:" + args[0]);
                     channel.invokeMethod("error", args[0]);
                     helper.stop();
                     break;
@@ -241,11 +241,11 @@ public class AudioManagerPlugin implements FlutterPlugin, MethodCallHandler, Vol
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         //Stop the audio on app killed
 
-        Log.d("onDetachedFromEngine", "onDetachedFromEngine Fired");
+//        Log.d("onDetachedFromEngine", "onDetachedFromEngine Fired");
        try {
            helper.stop();
            helper.release();
-           Log.d("onDetachedFromEngine", "onDetachedFromEngine DONE");
+//           Log.d("onDetachedFromEngine", "onDetachedFromEngine DONE");
        } catch (Exception e){
            e.printStackTrace();
        }

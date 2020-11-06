@@ -119,7 +119,7 @@ public class VolumeChangeObserver {
                 mVolumeChangeListener = null;
                 mRegistered = false;
             } catch (Exception e) {
-                Log.e(TAG, "unregisterReceiver: ", e);
+//                Log.e(TAG, "unregisterReceiver: ", e);
             }
         }
     }
@@ -145,7 +145,7 @@ public class VolumeChangeObserver {
                         }
 
                         if (BuildConfig.DEBUG) {
-                            Log.d(TAG, "volume=" + volume);
+//                            Log.d(TAG, "volume=" + volume);
                         }
                     }
                 }

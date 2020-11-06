@@ -327,11 +327,11 @@ public class MediaPlayerHelper {
                 uiHolder.player.start();
                 return true;
             } catch (Exception e) {
-                Log.e(TAG, "setPlaySpeed: ", e);
+//                Log.e(TAG, "setPlaySpeed: ", e);
                 return false;
             }
         } else {
-            Log.v(TAG, "对不起请升级手机系统至Android6.0及以上");
+//            Log.v(TAG, "对不起请升级手机系统至Android6.0及以上");
             return false;
         }
     }
@@ -371,7 +371,7 @@ public class MediaPlayerHelper {
 
     private boolean canPlay() {
         if (!isPrepare) {
-            Log.e(TAG, "媒体资源加载失败");
+//            Log.e(TAG, "媒体资源加载失败");
             onStatusCallbackNext(CallBackState.error, "媒体资源加载失败");
         }
         return isPrepare;

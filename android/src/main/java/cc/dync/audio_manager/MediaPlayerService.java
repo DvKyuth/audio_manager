@@ -100,7 +100,7 @@ public class MediaPlayerService extends Service {
         BroadcastReceiver playerReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("action", intent.getAction());
+//                Log.d("action", intent.getAction());
                 switch (Objects.requireNonNull(intent.getAction())) {
                     case ACTION_NEXT:
                         serviceEvents.onEvents(Events.next);
@@ -174,7 +174,7 @@ public class MediaPlayerService extends Service {
         // 设置点击通知结果
 //        Intent intent = new Intent("android.flutter.audio_manager.activity");
 
-        Log.d("getPackageName()" , getPackageName());
+//        Log.d("getPackageName()" , getPackageName());
 
         Intent intent = new Intent(this, AudioManagerPlugin.class);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(this, CONTENT_PENDING_REQUESTS, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -188,7 +188,7 @@ public class MediaPlayerService extends Service {
 
             contentPendingIntent = PendingIntent.getActivity(context, CONTENT_PENDING_REQUESTS, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Log.d("contentPendingIntent" , getPackageName());
+//            Log.d("contentPendingIntent" , getPackageName());
 
         }catch (Exception e) {
             e.printStackTrace();
