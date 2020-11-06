@@ -132,7 +132,7 @@ class AudioManager {
         break;
       case "stop":
         _onEvents(AudioManagerEvents.stop, null);
-        _reset();
+        // _reset();
         break;
       case "volumeChange":
         _volume = call.arguments;
